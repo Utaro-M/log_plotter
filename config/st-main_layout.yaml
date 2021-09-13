@@ -1,5 +1,5 @@
 main:
-  cog :
+  cog x:
     legends:
       - { key: st_originActCog, id: [0]}
       - { key: st_originRefCog, id: [0]}
@@ -16,7 +16,8 @@ main:
       # - { key: abst_footGenZmp, id: [0-2]}
       # - { key: abst_footModZmp, id: [0-2]}
       # - { key: abst_footActZmp, id: [0-2]}
-    bottom_label:
+    bottom_label: time [s]
+    left_label: pos [m]
 
   # cog velocity:
   #   legends:
