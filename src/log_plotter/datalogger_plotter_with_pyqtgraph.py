@@ -38,7 +38,7 @@ class LogPlotter(object):
         self.plotItemOrig = {}
         # default font style
         self.font_type = 'Times New Roman'
-        self.font_size = 12
+        self.font_size = 18
         self.font_color = 'black'
         #
         self.start_idx = start_idx
@@ -281,6 +281,10 @@ class LogPlotter(object):
         font_style_list.append('font-family: ' + self.font_type)
         font_style_list.append('font-size: ' + str(self.font_size) + 'pt')
         font_style_list.append('color: ' + self.font_color)
+        font_style_list_legend = []
+        font_style_list_legend.append('font-family: ' + self.font_type)
+        font_style_list_legend.append('font-size: ' + str(self.font_size-5f) + 'pt')
+        font_style_list_legend.append('color: ' + self.font_color)
         sidelist = [ 'bottom', 'left' ]
         for p in self.view.ci.items.keys():
             text = p.titleLabel.text
@@ -289,7 +293,7 @@ class LogPlotter(object):
             for data in p.legend.items:
                 label = data[1]
                 text = label.text
-                full = "<span style='%s'>%s</span>" % ('; '.join(font_style_list), text)
+                full = "<span style='%s'>%s</span>" % ('; '.join(font_style_list_legend), text)
                 label.item.setHtml(full)
             for side in sidelist:
                 ax = p.getAxis(side)

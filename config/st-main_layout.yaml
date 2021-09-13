@@ -17,7 +17,7 @@ main:
       # - { key: abst_footModZmp, id: [0-2]}
       # - { key: abst_footActZmp, id: [0-2]}
     bottom_label: time [s]
-    left_label: pos [m]
+    left_label: distance [m]
 
   # cog velocity:
   #   legends:
