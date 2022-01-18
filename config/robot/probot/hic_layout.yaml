@@ -1,0 +1,7 @@
+main:
+  cog x:
+    legends:
+      - { key: head_gyro, id: [0], label: "x"}
+      - { key: head_gyro, id: [1], label: "y"}
+      - { key: head_gyro, id: [2], label: "z"}
+      - { key: hic, id: [0]}

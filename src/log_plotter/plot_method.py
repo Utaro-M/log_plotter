@@ -4,6 +4,8 @@ import struct
 import math
 import sys
 
+from scipy import integrate
+import time
 try:
     import pyqtgraph
 except:
@@ -178,3 +180,33 @@ class PlotMethod(object):
     @staticmethod
     def normal(plot_item, times, data_dict, logs, log_cols, cur_col, key, i):
         plot_item.plot(times, data_dict[logs[0]][:, log_cols[0]], pen=pyqtgraph.mkPen(PlotMethod.linetypes["color"][i], width=2, style=PlotMethod.linetypes["style"][i]), name=key)
+
+    @staticmethod
+    def plot_hic(plot_item, times, data_dict, logs, log_cols, cur_col, key, i):
+        HIC_list = []
+        t2_list= []
+        start_time = time.time()
+        loop_time = start_time
+        loop_num = 0
+        step = 1
+        ax = data_dict[logs[0]][:, log_cols[0]] / 9.80665
+        ay = data_dict[logs[0]][:, log_cols[0]+1] / 9.80665
+        az = data_dict[logs[0]][:, log_cols[0]+2] / 9.80665
+        sqrt_a =  numpy.sqrt(numpy.square(ax) + numpy.square(ay) + numpy.square(az))
+        print("{}\n data length = {}, step = {}, delta = {:.2g}".format("-"*40, len(times), step, step*0.002))
+
+        for t1_idx in range(0,len(times)-step,step):
+            for t2_idx in range(t1_idx+1,len(times)):
+                delta = times[t2_idx] - times[t1_idx]
+                integrate_a = integrate.trapz(list(sqrt_a[t1_idx:t2_idx]),list(range(t1_idx,t2_idx)))
+                t2_list.append((1/delta*integrate_a)**2.5*delta)
+            HIC_list.append(t2_list)
+            if(t1_idx %100 == 0):
+                print("loop{}: data_num{}, remaining time = {:.2g} min".format(loop_num,t1_idx, (time.time() - loop_time) * ((len(times) * 1.0 / step) - loop_num -1) / 60.0))
+            t2_list=[]
+            loop_time = time.time()
+            loop_num += 1
+
+        hic_max = max(list(map(lambda x: max(x), HIC_list)))
+        goal_time = time.time()
+        print("{}\n calculation time = {}\n HIC = {}\n{}".format("-"*40, goal_time - start_time,  hic_max, "-"*40))
