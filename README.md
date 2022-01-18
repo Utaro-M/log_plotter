@@ -117,3 +117,7 @@ watt:
     - { log: RobotHardware0_tau, column: [0-33] }
 ```
 
+### HIC plot
+```
+datalogger_plotter_with_pyqtgraph.py -f [path] --start 6000 --length 1000 --plot config/robot/probot/probot_plot.yaml --layout config/robot/probot/hic_layout.yaml
+```
