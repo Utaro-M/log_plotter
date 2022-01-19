@@ -3,8 +3,7 @@ extend:
 hic:
   func: plot_hic
   data:
-    - { log: RobotHardware0_head_gyro, column: [0,1,2]}
-
+    - { log: RobotHardware0_head_accel, column: [0,1,2]}
 head_gyro:
   data:
     - { log: RobotHardware0_head_gyro, column: [0,1,2]}

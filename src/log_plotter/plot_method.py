@@ -193,20 +193,25 @@ class PlotMethod(object):
         ay = data_dict[logs[0]][:, log_cols[0]+1] / 9.80665
         az = data_dict[logs[0]][:, log_cols[0]+2] / 9.80665
         sqrt_a =  numpy.sqrt(numpy.square(ax) + numpy.square(ay) + numpy.square(az))
+        max_value = 0
+        debug_data = []
         print("{}\n data length = {}, step = {}, delta = {:.2g}".format("-"*40, len(times), step, step*0.002))
 
         for t1_idx in range(0,len(times)-step,step):
-            for t2_idx in range(t1_idx+1,len(times)):
+            for t2_idx in range(t1_idx+1, min(len(times), t1_idx+10)):
                 delta = times[t2_idx] - times[t1_idx]
-                integrate_a = integrate.trapz(list(sqrt_a[t1_idx:t2_idx]),list(range(t1_idx,t2_idx)))
+                integrate_a = integrate.trapz(list(sqrt_a[t1_idx:t2_idx]), times[t1_idx:t2_idx])# , dx=0.002)
                 t2_list.append((1/delta*integrate_a)**2.5*delta)
+                if max_value < (1/delta*integrate_a)**2.5*delta :
+                    max_value = (1/delta*integrate_a)**2.5*delta
+                    debug_data  = [times[t1_idx],times[t2_idx], delta, sqrt_a[t1_idx:t2_idx], integrate_a]
             HIC_list.append(t2_list)
             if(t1_idx %100 == 0):
                 print("loop{}: data_num{}, remaining time = {:.2g} min".format(loop_num,t1_idx, (time.time() - loop_time) * ((len(times) * 1.0 / step) - loop_num -1) / 60.0))
             t2_list=[]
             loop_time = time.time()
             loop_num += 1
-
         hic_max = max(list(map(lambda x: max(x), HIC_list)))
         goal_time = time.time()
+        # print("max_value = {}, debug_data = {}".format(max_value, debug_data))
         print("{}\n calculation time = {}\n HIC = {}\n{}".format("-"*40, goal_time - start_time,  hic_max, "-"*40))
