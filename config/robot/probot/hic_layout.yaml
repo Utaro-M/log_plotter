@@ -1,7 +1,8 @@
 main:
-  cog x:
+  head acceleration:
     legends:
-      - { key: head_accel, id: [0], label: "x"}
-      - { key: head_accel, id: [1], label: "y"}
-      - { key: head_accel, id: [2], label: "z"}
+      - { key: head_accel_g, id: [0], label: "ax"}
+      - { key: head_accel_g, id: [1], label: "ay"}
+      - { key: head_accel_g, id: [2], label: "az"}
       - { key: hic, id: [0]}
+    left_label: "acceleration [G]"

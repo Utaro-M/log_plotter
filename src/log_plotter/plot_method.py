@@ -198,7 +198,7 @@ class PlotMethod(object):
         print("{}\n data length = {}, step = {}, delta = {:.2g}".format("-"*40, len(times), step, step*0.002))
 
         for t1_idx in range(0,len(times)-step,step):
-            for t2_idx in range(t1_idx+1, min(len(times), t1_idx+10)):
+            for t2_idx in range(t1_idx+1, min(len(times), t1_idx+501)): ##search in 1[s]
                 delta = times[t2_idx] - times[t1_idx]
                 integrate_a = integrate.trapz(list(sqrt_a[t1_idx:t2_idx]), times[t1_idx:t2_idx])# , dx=0.002)
                 t2_list.append((1/delta*integrate_a)**2.5*delta)
@@ -206,12 +206,19 @@ class PlotMethod(object):
                     max_value = (1/delta*integrate_a)**2.5*delta
                     debug_data  = [times[t1_idx],times[t2_idx], delta, sqrt_a[t1_idx:t2_idx], integrate_a]
             HIC_list.append(t2_list)
-            if(t1_idx %100 == 0):
+            if(t1_idx %500 == 0):
                 print("loop{}: data_num{}, remaining time = {:.2g} min".format(loop_num,t1_idx, (time.time() - loop_time) * ((len(times) * 1.0 / step) - loop_num -1) / 60.0))
             t2_list=[]
             loop_time = time.time()
             loop_num += 1
         hic_max = max(list(map(lambda x: max(x), HIC_list)))
         goal_time = time.time()
-        # print("max_value = {}, debug_data = {}".format(max_value, debug_data))
-        print("{}\n calculation time = {}\n HIC = {}\n{}".format("-"*40, goal_time - start_time,  hic_max, "-"*40))
+        print("{}\n t1 = {}[s], t2 = {}[s], t2-t1 = {}[s]\n HIC = {}\n{}".format("-"*60, debug_data[0], debug_data[1], debug_data[2], hic_max, "-"*60))
+        ## plot sqrt_a
+        plot_item.plot(times, list(sqrt_a), pen=pyqtgraph.mkPen(PlotMethod.linetypes["color"][i], width=2, style=PlotMethod.linetypes["style"][i]), name="sqrt(ax^2+ay^2+az^2)")
+
+    @staticmethod
+    def plot_head_accel_g(plot_item, times, data_dict, logs, log_cols, cur_col, key, i):
+        data=data_dict[logs[0]][:, log_cols[0]]
+        data_g=[(x/9.80665) for x in data]
+        plot_item.plot(times, data_g, pen=pyqtgraph.mkPen(PlotMethod.linetypes["color"][i], width=2, style=PlotMethod.linetypes["style"][i]), name=key)
