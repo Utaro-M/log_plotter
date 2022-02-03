@@ -1,8 +1,12 @@
 main:
   head acceleration:
     legends:
+      #### for plot accel
       - { key: head_accel_g, id: [0], label: "ax"}
       - { key: head_accel_g, id: [1], label: "ay"}
       - { key: head_accel_g, id: [2], label: "az"}
+      ####
+      #### calc HIC and plot sqrt_a
       - { key: hic, id: [0]}
+      ####
     left_label: "acceleration [G]"

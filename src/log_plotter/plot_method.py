@@ -199,6 +199,7 @@ class PlotMethod(object):
 
         for t1_idx in range(0,len(times)-step,step):
             for t2_idx in range(t1_idx+1, min(len(times), t1_idx+501)): ##search in 1[s]
+            # for t2_idx in range(t1_idx+1, min(len(times), t1_idx+11)): ##for plot only[s]
                 delta = times[t2_idx] - times[t1_idx]
                 integrate_a = integrate.trapz(list(sqrt_a[t1_idx:t2_idx]), times[t1_idx:t2_idx])# , dx=0.002)
                 t2_list.append((1/delta*integrate_a)**2.5*delta)
